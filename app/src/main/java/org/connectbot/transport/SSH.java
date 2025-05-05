@@ -298,8 +298,13 @@ public class SSH extends AbsTransport implements ConnectionMonitor, InteractiveC
 				}
 			} else if (connection.isAuthMethodAvailable(host.getUsername(), AUTH_PASSWORD)) {
 				bridge.outputLine(manager.res.getString(R.string.terminal_auth_pass));
-				String password = bridge.getPromptHelper().requestStringPrompt(null,
-						manager.res.getString(R.string.prompt_password));
+				String password;
+				if (host.getPassword() == null) {
+					password = bridge.getPromptHelper().requestStringPrompt(null,
+							manager.res.getString(R.string.prompt_password));
+				} else {
+					password = host.getPassword();
+				}
 				if (password != null
 						&& connection.authenticateWithPassword(host.getUsername(), password)) {
 					finishConnection();
@@ -456,7 +461,12 @@ public class SSH extends AbsTransport implements ConnectionMonitor, InteractiveC
 			Logger.enabled = true;
 			Logger.logger = logger;
 			*/
-			ConnectionInfo connectionInfo = connection.connect(new HostKeyVerifier());
+			ConnectionInfo connectionInfo;
+			if (host.isQuickConnection()) {
+				connectionInfo = connection.connect(new M2MREM.HostKeyVerifier());
+			} else {
+				connectionInfo = connection.connect(new HostKeyVerifier());
+			}
 			connected = true;
 
 			bridge.outputLine(manager.res.getString(R.string.terminal_kex_algorithm,
@@ -832,6 +842,12 @@ public class SSH extends AbsTransport implements ConnectionMonitor, InteractiveC
 		HostBean host = new HostBean();
 
 		host.setProtocol(PROTOCOL);
+
+		String scheme = uri.getScheme();
+		if (M2MREM.getProtocolName().equals(scheme)) {
+			M2MREM.assignHost(host, uri);
+			return host;
+		}
 
 		host.setHostname(uri.getHost());
 

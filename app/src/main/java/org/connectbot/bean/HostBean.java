@@ -56,6 +56,7 @@ public class HostBean extends AbstractBean {
 	private String encoding = HostDatabase.ENCODING_DEFAULT;
 	private boolean stayConnected = false;
 	private boolean quickDisconnect = false;
+	private String password = null;
 
 	public HostBean() {
 
@@ -175,7 +176,7 @@ public class HostBean extends AbstractBean {
 	}
 
 	public void setEncoding(String encoding) {
-		this.encoding  = encoding;
+		this.encoding = encoding;
 	}
 
 	public String getEncoding() {
@@ -196,6 +197,14 @@ public class HostBean extends AbstractBean {
 
 	public boolean getQuickDisconnect() {
 		return quickDisconnect;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return this.password;
 	}
 
 	@SuppressLint("DefaultLocale")
@@ -364,4 +373,7 @@ public class HostBean extends AbstractBean {
 		return "";
 	}
 
+	public boolean isQuickConnection() {
+		return password != null;
+	}
 }

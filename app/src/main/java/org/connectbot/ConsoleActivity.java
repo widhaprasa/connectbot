@@ -27,6 +27,7 @@ import org.connectbot.service.PromptHelper;
 import org.connectbot.service.TerminalBridge;
 import org.connectbot.service.TerminalKeyListener;
 import org.connectbot.service.TerminalManager;
+import org.connectbot.transport.M2MREM;
 import org.connectbot.util.PreferenceConstants;
 import org.connectbot.util.TerminalViewPager;
 
@@ -161,7 +162,15 @@ public class ConsoleActivity extends AppCompatActivity implements BridgeDisconne
 			bound.disconnectListener = ConsoleActivity.this;
 			bound.setResizeAllowed(true);
 
-			final String requestedNickname = (requested != null) ? requested.getFragment() : null;
+			String requestedNickname = null;
+			if (requested != null) {
+				if (M2MREM.getProtocolName().equals(requested.getScheme())) {
+					requestedNickname = requested.getHost() + ":" + requested.getPort();
+				} else {
+					requestedNickname = requested.getFragment();
+				}
+			}
+
 			TerminalBridge requestedBridge = bound.getConnectedBridge(requestedNickname);
 
 			// If we didn't find the requested connection, try opening it

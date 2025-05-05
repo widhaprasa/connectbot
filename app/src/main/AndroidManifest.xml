@@ -190,6 +190,7 @@
 				<!-- format:  ssh://user@host:port/#nickname  -->
 				<!-- format:  telnet://host:port/#nickname  -->
 				<!-- format:  local://  -->
+				<data android:scheme="m2mrem"/>
 			</intent-filter>
 		</activity>
 

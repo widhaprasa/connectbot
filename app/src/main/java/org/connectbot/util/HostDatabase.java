@@ -425,6 +425,10 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 	 */
 	@Override
 	public HostBean saveHost(HostBean host) {
+		if (host.isQuickConnection()) {
+			return host;
+		}
+
 		long id = host.getId();
 
 		mDb.beginTransaction();

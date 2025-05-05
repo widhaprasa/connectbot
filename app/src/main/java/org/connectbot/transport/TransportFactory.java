@@ -46,7 +46,7 @@ public class TransportFactory {
 	 * @return
 	 */
 	public static AbsTransport getTransport(String protocol) {
-		if (SSH.getProtocolName().equals(protocol)) {
+		if (SSH.getProtocolName().equals(protocol) || M2MREM.getProtocolName().equals(protocol)) {
 			return new SSH();
 		} else if (Telnet.getProtocolName().equals(protocol)) {
 			return new Telnet();

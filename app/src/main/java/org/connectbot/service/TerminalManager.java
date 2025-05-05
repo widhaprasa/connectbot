@@ -34,6 +34,7 @@ import org.connectbot.bean.HostBean;
 import org.connectbot.bean.PubkeyBean;
 import org.connectbot.data.ColorStorage;
 import org.connectbot.data.HostStorage;
+import org.connectbot.transport.M2MREM;
 import org.connectbot.transport.TransportFactory;
 import org.connectbot.util.HostDatabase;
 import org.connectbot.util.PreferenceConstants;
@@ -267,7 +268,10 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	 * format specified by an individual transport.
 	 */
 	public TerminalBridge openConnection(Uri uri) {
-		HostBean host = TransportFactory.findHost(hostdb, uri);
+		HostBean host = null;
+		if (!M2MREM.getProtocolName().equals(uri.getScheme())) {
+			host = TransportFactory.findHost(hostdb, uri);
+		}
 
 		if (host == null)
 			host = TransportFactory.getTransport(uri.getScheme()).createHost(uri);
